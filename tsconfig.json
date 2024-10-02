@@ -21,6 +21,8 @@
       "#/*": ["./src/*"]
     },
 
+    "outDir": "./build",
+
     // Not transpiling with TypeScript (tsc):
     "module": "Preserve",
     "noEmit": true,

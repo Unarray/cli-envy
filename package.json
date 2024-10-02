@@ -3,18 +3,30 @@
   "version": "1.0.0",
   "author": "Unarray",
   "license": "ISC",
-  "scripts": {},
+  "type": "module",
+  "bin": {
+    "envy": "dist/envy"
+  },
+  "scripts": {
+    "link-cli": "bun unlink && bun link && bun link -g @unarray/cli-envy",
+    "build": "bun build --compile --minify --sourcemap ./src/bin.ts --outfile dist/envy"
+  },
   "keywords": [
     "cli",
     "envy",
     "cli-envy"
   ],
+  "dependencies": {
+    "@commander-js/extra-typings": "^12.1.0",
+    "@inquirer/prompts": "^6.0.1",
+    "commander": "^12.1.0"
+  },
   "devDependencies": {
     "@bluzzi/eslint-config": "^1.2.1",
     "@types/node": "^22.7.4",
     "eslint": "8",
-    "tsx": "^4.19.1",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "@types/bun": "latest"
   },
   "eslintConfig": {
     "extends": "@bluzzi",
