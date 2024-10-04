@@ -29,3 +29,9 @@ export const loadConfig = async(): Promise<z.output<typeof configSchema>> => {
 
   return configSchema.parse(await file.json());
 };
+
+export const isResourcesDirSetup = async(): Promise<boolean> => {
+  const config = await loadConfig();
+
+  return config.resourcesDir !== "";
+};
