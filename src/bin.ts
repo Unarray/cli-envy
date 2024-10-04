@@ -3,7 +3,7 @@ import { basename } from "path";
 import { version, name } from "../package.json";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { commands } from "#/commands";
+import { get, list, setDir } from "#/commands";
 
 
 const terminalWidth = yargs(hideBin(process.argv)).terminalWidth();
@@ -17,18 +17,23 @@ void yargs(hideBin(process.argv))
 
   .help().alias("h", "help")
 
-  .command(commands)
+  .command(get)
+  .command(list)
+  .command(setDir)
 
   .fail(function(msg, err, yargs) {
+    const formatMessage = (message: string): string => `\n# ${message}\n`;
+
+    console.error("-".repeat(terminalWidth));
+
     if (err) {
-      console.error(err.message);
+      console.error(formatMessage(err.message));
     } else {
-      console.error(msg);
+      console.error(formatMessage(msg));
     }
 
     console.error("-".repeat(terminalWidth));
     console.error(yargs.help());
 
     process.exit(1);
-  })
-  .argv;
+  }).argv;

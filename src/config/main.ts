@@ -30,8 +30,10 @@ export const loadConfig = async(): Promise<z.output<typeof configSchema>> => {
   return configSchema.parse(await file.json());
 };
 
-export const isResourcesDirSetup = async(): Promise<boolean> => {
-  const config = await loadConfig();
+export const isResourcesDirValid = async(): Promise<boolean> => {
+  const { resourcesDir } = await loadConfig();
 
-  return config.resourcesDir !== "";
+  if (resourcesDir === "") return false;
+
+  return existsSync(resourcesDir) === true && statSync(resourcesDir).isDirectory() === true;
 };
