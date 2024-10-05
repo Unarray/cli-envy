@@ -1,5 +1,5 @@
 import { readdirSync, statSync } from "fs";
-import type { FileInformation } from "./type";
+import type { EntityInformation } from "./type";
 import { extname, join, parse, relative } from "path";
 
 
@@ -9,31 +9,43 @@ import { extname, join, parse, relative } from "path";
  * @param {string} directoryPath - The path of the directory to explore.
  * @returns {string[]} - An array containing the relative paths of files and subdirectories.
  */
-export const scanDirectory = (directoryPath: string): FileInformation[] => {
-  const files: FileInformation[] = [];
+export const scanDirectory = (directoryPath: string, options = { recursive: true, includeDir: false }): EntityInformation[] => {
+  const entities: EntityInformation[] = [];
   const directories: string[] = [directoryPath];
 
   while (directories.length > 0) {
     const currentDirectory = directories.pop();
-    if (!currentDirectory) return files; // for TS and safe while
+    if (currentDirectory === undefined) return entities; // for TS and safe while
 
     for (const file of readdirSync(currentDirectory)) {
       const filePath = join(currentDirectory, file);
       const fileInfo = statSync(filePath);
 
-      if (fileInfo.isDirectory()) {
+      if (fileInfo.isDirectory() === true) {
+        if (options.includeDir === true) {
+          entities.push({
+            absolutePath: filePath,
+            relativePath: relative(directoryPath, filePath),
+            isFile: false,
+            name: parse(filePath).name
+          });
+        }
+
         directories.push(filePath);
         continue;
       }
 
-      files.push({
+      entities.push({
         absolutePath: filePath,
         relativePath: relative(directoryPath, filePath),
-        fileExtension: extname(filePath),
-        fileName: parse(filePath).name
+        isFile: true,
+        extension: extname(filePath),
+        name: parse(filePath).name
       });
     }
+
+    if (options.recursive === false) return entities;
   }
 
-  return files;
+  return entities;
 };

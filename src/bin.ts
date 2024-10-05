@@ -3,7 +3,7 @@ import { basename } from "path";
 import { version, name } from "../package.json";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { get, list, setDir } from "#/commands";
+import { base, get, list, setDir } from "#/commands";
 
 
 const terminalWidth = yargs(hideBin(process.argv)).terminalWidth();
@@ -17,6 +17,7 @@ void yargs(hideBin(process.argv))
 
   .help().alias("h", "help")
 
+  .command(base)
   .command(get)
   .command(list)
   .command(setDir)
