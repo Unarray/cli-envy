@@ -2,6 +2,7 @@ import { createCommand } from "../util";
 import { loadConfig, saveConfig } from "#/config";
 import { existsSync, mkdirSync, statSync } from "fs";
 import { resolve } from "path";
+import { logger } from "#/utils/logger";
 
 
 export const command = createCommand({
@@ -21,7 +22,7 @@ export const command = createCommand({
     }
 
     if (statSync(dirPath).isDirectory() === false) {
-      throw new Error(`${dirPath} isn't a directory`);
+      return logger.error(`${dirPath} isn't a directory`);
     }
 
     const config = await loadConfig();
@@ -31,6 +32,6 @@ export const command = createCommand({
       resourcesDir: dirPath
     });
 
-    console.log("Resources directory path succesfuly saved!");
+    logger.success("Resources directory path succesfuly saved!");
   }
 });

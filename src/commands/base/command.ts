@@ -9,6 +9,8 @@ import type { Choice } from "#/commands/base/type";
 import { cwd } from "process";
 import { write } from "bun";
 import { existsSync, statSync } from "fs";
+import { logger } from "#/utils/logger";
+import { styleText } from "#/utils/style-text";
 
 
 export const command = createCommand({
@@ -69,7 +71,7 @@ export const command = createCommand({
     const resource = Bun.file(responseResource.absolutePath);
 
     if (await resource.exists() === false) {
-      throw new Error(`Resources ${responseResource.absolutePath} doesn't exist`);
+      return logger.error(`Resources ${styleText(["underline"], responseResource.absolutePath)} doesn't exist`);
     }
 
     const outputResponse = await input({
@@ -89,6 +91,6 @@ export const command = createCommand({
 
     await write(target, content);
 
-    console.log("Resource succesfuly exported!");
+    logger.success("Resource succesfuly exported!");
   }
 });

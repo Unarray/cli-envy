@@ -2,6 +2,7 @@ import { createCommand } from "../util";
 import { isResourcesDirValid, loadConfig } from "#/config";
 import { scanDirectory } from "#/utils/file-system";
 import dedent from "dedent";
+import { logger } from "#/utils/logger";
 
 
 export const command = createCommand({
@@ -20,7 +21,7 @@ export const command = createCommand({
       printFile += `- ${relativePath}\n`;
     }
 
-    console.log(dedent`
+    logger.text(dedent`
       Available resources:
       ${printFile === "" ? "- No resources found" : printFile}
     `);

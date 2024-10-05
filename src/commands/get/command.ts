@@ -1,6 +1,7 @@
 import { createCommand } from "../util";
 import { isResourcesDirValid, loadConfig } from "#/config";
 import { join } from "path";
+import { logger } from "#/utils/logger";
 
 
 export const command = createCommand({
@@ -21,7 +22,7 @@ export const command = createCommand({
     const resource = Bun.file(join(config.resourcesDir, args.resource));
 
     if (await resource.exists() === false) {
-      throw new Error(`Resources ${args.resource} doesn't exist`);
+      logger.error(`Resources ${args.resource} doesn't exist`);
     }
 
     console.log(await resource.text());

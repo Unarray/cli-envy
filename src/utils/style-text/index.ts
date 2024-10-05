@@ -1,0 +1,1 @@
+export { styleText, styleText as st } from "./main";
