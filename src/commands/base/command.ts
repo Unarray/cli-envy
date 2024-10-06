@@ -15,7 +15,7 @@ import { styleText } from "#/utils/style-text";
 
 export const command = createCommand({
   command: "*",
-  describe: "Get your resource content",
+  describe: "Interactive CLI to copy your resources",
   builder: (yargs) => yargs,
   handler: async() => {
     if (await isResourcesDirValid() === false) {
