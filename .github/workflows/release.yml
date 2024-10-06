@@ -43,15 +43,31 @@
         - name: Install dependencies
           run: bun install
         - name: Build CLI
+          id: build_cli
+          shell: bash
           run: |
-            bun build --compile --minify --sourcemap ./src/bin.ts --target bun-${{ matrix.platform }} --outfile ./dist/${{ matrix.platform }}
+            # Determine the output filename and asset name based on the platform
+            if [[ "${{ matrix.platform }}" == windows-* ]]; then
+              outfile="./dist/${{ matrix.platform }}.exe"
+              asset_name="envy-cli-${{ matrix.platform }}.exe"
+            else
+              outfile="./dist/${{ matrix.platform }}"
+              asset_name="envy-cli-${{ matrix.platform }}"
+            fi
+            echo "Building for platform: ${{ matrix.platform }}"
+            echo "Output file: $outfile"
+            # Build the CLI
+            bun build --compile --minify --sourcemap ./src/bin.ts --target bun-${{ matrix.platform }} --outfile $outfile
+            # Set the outfile and asset_name as output variables
+            echo "outfile=$outfile" >> $GITHUB_OUTPUT
+            echo "asset_name=$asset_name" >> $GITHUB_OUTPUT
         - name: Upload build artifact to release
           uses: actions/upload-release-asset@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ needs.release.outputs.upload_url }}
-            asset_path: ./dist/${{ matrix.platform }}*
-            asset_name: envy-${{ matrix.platform }}
+            asset_path: ${{ steps.build_cli.outputs.outfile }}
+            asset_name: ${{ steps.build_cli.outputs.asset_name }}
             asset_content_type: application/octet-stream
 ...
