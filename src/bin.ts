@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-import { basename } from "path";
 import { version, name } from "../package.json";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -11,7 +10,7 @@ import dedent from "dedent";
 const terminalWidth = yargs(hideBin(process.argv)).terminalWidth();
 
 void yargs(hideBin(process.argv))
-  .scriptName(basename(process.argv[1] ?? ""))
+  .scriptName("envy")
   .usage(`${name} - v${version}`)
   .usage("Usage: $0 <cmd> [opts]")
 
