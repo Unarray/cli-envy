@@ -27,13 +27,13 @@ jobs:
         run: bun install
       - name: Build CLI
         run: |
-          bun build --compile --minify --sourcemap ./src/bin.ts --target bun-${{ matrix.platform }} --outfile dist/${{ matrix.platform }}
+          bun build --compile --minify --sourcemap ./src/bin.ts --target bun-${{ matrix.platform }} --outfile dist/${{ matrix.platform }}/envy
       # Upload the built CLI as an artifact for the release job to use later
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.platform }}
-          path: ./dist/${{ matrix.platform }}
+          path: ./dist/${{ matrix.platform }}/envy
 
   release:
     runs-on: ubuntu-latest
@@ -55,6 +55,5 @@ jobs:
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            ./dist/**
-
+            ./dist/**/envy
 ...
