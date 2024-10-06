@@ -30,7 +30,7 @@ jobs:
           bun build --compile --minify --sourcemap ./src/bin.ts --target bun-${{ matrix.platform }} --outfile ./dist/${{ matrix.platform }}
       # Upload the built CLI as an artifact for the release job to use later
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cli-builds
           path: ./dist/${{ matrix.platform }}
@@ -40,11 +40,11 @@ jobs:
     needs: build  # Wait for all builds to finish
     steps:
       # Checkout the repository to ensure git is available
-      - uses: actions/checkout@v3
       - name: Download all build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: cli-builds
+      - uses: actions/checkout@v3
       - name: Print builds
         run: ls ./dist -R
       - name: Create release
